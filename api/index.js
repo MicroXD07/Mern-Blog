@@ -47,6 +47,13 @@ app.use("/api/cards", cardsRoute);
 app.use("/api/categories", categoriesRoute);
 app.use("/api/protected", authRoutes.authenticateJWT, protectedRoute);
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("build"));
+  app.get("*", (req, res) => {
+    req.sendFile(path.resolve(__dirname, "build", "index.html"));
+  });
+}
+
 app.listen("3000", () => {
   console.log("Backend is running!");
 });
